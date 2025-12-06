@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Primary Colors */
+    --color-primary: #6B4F3A; /* walnut-brown */
+    --color-primary-foreground: #FFFFFF; /* white */
+    
+    /* Secondary Colors */
+    --color-secondary: #2F4F3E; /* forest-green */
+    --color-secondary-foreground: #FFFFFF; /* white */
+    
+    /* Accent Colors */
+    --color-accent: #D4A574; /* honey-gold */
+    --color-accent-foreground: #2C1810; /* rich-brown */
+    
+    /* Background Colors */
+    --color-background: #FAF7F0; /* cream-canvas */
+    --color-foreground: #2C1810; /* rich-brown */
+    
+    /* Surface Colors */
+    --color-surface: #F3E9D2; /* warm-beige */
+    --color-card: #FFFFFF; /* white */
+    --color-card-foreground: #2C1810; /* rich-brown */
+    
+    /* Popover Colors */
+    --color-popover: #FFFFFF; /* white */
+    --color-popover-foreground: #2C1810; /* rich-brown */
+    
+    /* Muted Colors */
+    --color-muted: #8B7355; /* sage-brown */
+    --color-muted-foreground: #5D4A3A; /* medium-brown */
+    
+    /* Destructive/Error Colors */
+    --color-destructive: #8B4513; /* warm-brown */
+    --color-destructive-foreground: #FFFFFF; /* white */
+    --color-error: #8B4513; /* warm-brown */
+    --color-error-foreground: #FFFFFF; /* white */
+    
+    /* Success Colors */
+    --color-success: #4A6741; /* natural-green */
+    --color-success-foreground: #FFFFFF; /* white */
+    
+    /* Warning Colors */
+    --color-warning: #B8860B; /* amber-caution */
+    --color-warning-foreground: #2C1810; /* rich-brown */
+    
+    /* Border & Input Colors */
+    --color-border: rgba(107, 79, 58, 0.12); /* walnut-transparent */
+    --color-input: rgba(107, 79, 58, 0.12); /* walnut-transparent */
+    --color-ring: #D4A574; /* honey-gold */
+    
+    /* Text Colors */
+    --color-text-primary: #2C1810; /* rich-brown */
+    --color-text-secondary: #5D4A3A; /* medium-brown */
+    
+    /* Additional Semantic Colors */
+    --color-trust: #8B7355; /* sage-brown */
+    --color-trust-foreground: #FFFFFF; /* white */
+    
+    /* Spacing & Layout */
+    --radius: 0.5rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Crimson Text', serif;
+  }
+
+  body, p, span, div, button, input, select, textarea {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
