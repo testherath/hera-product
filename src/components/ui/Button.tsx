@@ -45,6 +45,7 @@ export interface ButtonProps
     iconPosition?: 'left' | 'right';
     iconSize?: number | null;
     fullWidth?: boolean;
+    children?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
@@ -85,20 +86,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
 
     const renderIcon = (): React.ReactNode => {
         if (!iconName) return null;
-        try {
-            return (
-                <Icon
-                    name={iconName}
-                    size={calculatedIconSize}
-                    className={cn(
-                        children && iconPosition === 'left' && "mr-2",
-                        children && iconPosition === 'right' && "ml-2"
-                    )}
-                />
-            );
-        } catch {
-            return null;
-        }
+        return (
+            <Icon
+                name={iconName}
+                size={calculatedIconSize}
+                className={cn(
+                    children && iconPosition === 'left' && "mr-2",
+                    children && iconPosition === 'right' && "ml-2"
+                )}
+            />
+        );
     };
 
     const renderFallbackButton = (): React.ReactElement => (
@@ -118,42 +115,37 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
         </button>
     );
 
-    // When asChild is true, merge icons into the child element
     if (asChild) {
-        try {
-            if (!children || React.Children.count(children) !== 1) {
-                return renderFallbackButton();
-            }
-
-            const child = React.Children.only(children);
-
-            if (!React.isValidElement(child)) {
-                return renderFallbackButton();
-            }
-
-            const content = (
-                <>
-                    {loading && <LoadingSpinner />}
-                    {iconName && iconPosition === 'left' && renderIcon()}
-                    {child.props?.children}
-                    {iconName && iconPosition === 'right' && renderIcon()}
-                </>
-            );
-
-            const clonedChild = React.cloneElement(child as React.ReactElement<any>, {
-                className: cn(
-                    buttonVariants({ variant, size, className }),
-                    fullWidth && "w-full",
-                    child.props?.className
-                ),
-                disabled: disabled || loading || child.props?.disabled,
-                children: content,
-            });
-
-            return <Comp ref={ref} {...props}>{clonedChild}</Comp>;
-        } catch {
+        if (!children || React.Children.count(children) !== 1) {
             return renderFallbackButton();
         }
+
+        // Properly type child as a ReactElement with HTML attributes
+        const child = React.Children.only(children) as React.ReactElement<React.HTMLAttributes<HTMLElement>>;
+
+        if (!React.isValidElement(child)) {
+            return renderFallbackButton();
+        }
+
+        const content = (
+            <>
+                {loading && <LoadingSpinner />}
+                {iconName && iconPosition === 'left' && renderIcon()}
+                {child.props.children}
+                {iconName && iconPosition === 'right' && renderIcon()}
+            </>
+        );
+
+        const clonedChild = React.cloneElement(child, {
+            className: cn(
+                buttonVariants({ variant, size, className }),
+                fullWidth && "w-full",
+                child.props.className
+            ),
+            children: content,
+        });
+
+        return <Comp ref={ref} {...props}>{clonedChild}</Comp>;
     }
 
     return (

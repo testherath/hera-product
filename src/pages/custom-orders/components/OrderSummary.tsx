@@ -1,13 +1,15 @@
 import React from 'react';
 import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
-import { CustomOrderFormData, WoodType, ProductCategory, EngravingFont } from '../types';
+import { CustomOrderFormData, WoodType, ProductCategory, EngravingFont,PriceBreakdown  } from '../types';
 
 interface OrderSummaryProps {
   formData: CustomOrderFormData;
   category: ProductCategory | undefined;
   woodType: WoodType | undefined;
   font: EngravingFont | undefined;
+  summary: PriceBreakdown;
+  itemCount: number; 
   onEdit: (step: number) => void;
   onSubmit: () => void;
 }
@@ -17,6 +19,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   category,
   woodType,
   font,
+   summary,    // now available
+  itemCount, 
   onEdit,
   onSubmit,
 }) => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from "react-helmet-async";
 import Header from '../../components/Header';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
@@ -354,7 +354,7 @@ const Shop = () => {
       result = result.filter((product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+      product.tags.some((tag:string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
