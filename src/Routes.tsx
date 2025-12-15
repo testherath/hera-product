@@ -9,6 +9,7 @@ import Shop from './pages/shop';
 import CustomOrders from './pages/custom-orders';
 import Checkout from './pages/checkout';
 import Homepage from './pages/homepage';
+import { UserList } from './components/UserList';
 
 const Routes: React.FC = () => {
   return (
@@ -17,14 +18,15 @@ const Routes: React.FC = () => {
         <ScrollToTop />
         <RouterRoutes>
           {/* Define your routes here */}
-        <Route path="/" element={<Homepage />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/product-details" element={<ProductDetails />} />
-        <Route path="/shop" element={<Shop />} />
-        <Route path="/custom-orders" element={<CustomOrders />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/homepage" element={<Homepage />} />
-        <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<Homepage />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/product-details" element={<ProductDetails />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/custom-orders" element={<CustomOrders />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/homepage" element={<Homepage />} />
+          <Route path="/db-demo" element={<UserList />} />
+          <Route path="*" element={<NotFound />} />
         </RouterRoutes>
       </ErrorBoundary>
     </BrowserRouter>
