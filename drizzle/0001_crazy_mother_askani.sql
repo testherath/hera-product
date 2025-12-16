@@ -1,0 +1,22 @@
+CREATE TABLE "products" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"category" text NOT NULL,
+	"price" integer NOT NULL,
+	"original_price" integer,
+	"discount" integer,
+	"image" text NOT NULL,
+	"alt" text NOT NULL,
+	"images" text NOT NULL,
+	"wood_type" text NOT NULL,
+	"artisan" text NOT NULL,
+	"rating" double precision NOT NULL,
+	"reviews" integer NOT NULL,
+	"customizable" boolean DEFAULT false NOT NULL,
+	"in_stock" boolean DEFAULT true NOT NULL,
+	"featured" boolean DEFAULT false NOT NULL,
+	"description" text NOT NULL,
+	"dimensions" text,
+	"tags" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);

@@ -8,6 +8,20 @@
       "when": 1765874381232,
       "tag": "0000_closed_impossible_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765883734560,
+      "tag": "0001_crazy_mother_askani",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765884815175,
+      "tag": "0002_deep_bastion",
+      "breakpoints": true
     }
   ]
 }

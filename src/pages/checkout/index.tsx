@@ -16,8 +16,9 @@ import {
   ValidationErrors,
   CartItem,
   OrderSummary,
-  CheckoutStep } from
-'./types';
+  CheckoutStep
+} from
+  './types';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -49,66 +50,61 @@ const Checkout = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
 
   const steps: CheckoutStep[] = [
-  {
-    id: 1,
-    title: 'Information',
-    description: 'Contact details',
-    completed: false
-  },
-  {
-    id: 2,
-    title: 'Delivery',
-    description: 'Address & options',
-    completed: false
-  },
-  {
-    id: 3,
-    title: 'Payment',
-    description: 'Payment method',
-    completed: false
-  },
-  {
-    id: 4,
-    title: 'Review',
-    description: 'Confirm order',
-    completed: false
-  }];
+    {
+      id: 1,
+      title: 'Information',
+      description: 'Contact details',
+      completed: false
+    },
+    {
+      id: 2,
+      title: 'Delivery',
+      description: 'Address & options',
+      completed: false
+    },
+    {
+      id: 3,
+      title: 'Payment',
+      description: 'Payment method',
+      completed: false
+    },
+    {
+      id: 4,
+      title: 'Review',
+      description: 'Confirm order',
+      completed: false
+    }];
 
-
-  const cartItems: CartItem[] = [
-  {
-    id: '1',
-    name: 'Handcrafted Teak Cutting Board',
-    image: "https://images.unsplash.com/photo-1530310753722-ad9195fa1024",
-    alt: 'Rectangular teak wood cutting board with natural grain patterns on white marble countertop',
-    price: 8500,
-    quantity: 1,
-    woodType: 'Teak',
-    customization: 'Engraved: "The Johnson Family"'
-  },
-  {
-    id: '2',
-    name: 'Mahogany Serving Tray',
-    image: "https://images.unsplash.com/photo-1696177236690-ad5a281b9c2f",
-    alt: 'Oval mahogany serving tray with brass handles on wooden dining table',
-    price: 12000,
-    quantity: 2,
-    woodType: 'Mahogany'
-  }];
-
-
-  const orderSummary: OrderSummary = {
-    subtotal: 32500,
-    shipping: 1500,
-    tax: 5100,
-    total: 39100,
-    currency: 'LKR',
-    usdConversion: 130.33
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentStep]);
+
+  // Load cart from localStorage
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  useEffect(() => {
+    const savedCart = localStorage.getItem('heraCart');
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
+    }
+    // Fallback to empty if nothing saved, effectively handling "no items" in checkout which should redirect ideally
+  }, []);
+
+  const calculateTotal = () => {
+    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const shipping = 1500; // Fixed for now or dynamic based on address
+    const tax = Math.round(subtotal * 0.15);
+    const total = subtotal + shipping + tax;
+    return { subtotal, shipping, tax, total };
+  };
+
+  const currentSummary = calculateTotal();
+
+  const orderSummary: OrderSummary = {
+    ...currentSummary,
+    currency: 'LKR',
+    usdConversion: 130.33
+  };
 
   const handleFieldChange = (field: keyof CheckoutFormData, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -180,12 +176,38 @@ const Checkout = () => {
 
     setIsProcessing(true);
 
-    setTimeout(() => {
-      const generatedOrderNumber = `HH${Date.now().toString().slice(-8)}`;
-      setOrderNumber(generatedOrderNumber);
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          customers: formData, // Send flat form data or structured as API expects
+          items: cartItems,
+          totalAmount: currentSummary.total,
+          paymentMethod: formData.paymentMethod
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to place order');
+      }
+
+      const data = await response.json();
+
+      setOrderNumber(data.orderNumber);
       setIsProcessing(false);
       setShowConfirmation(true);
-    }, 2000);
+
+      // Clear cart
+      localStorage.removeItem('heraCart');
+
+    } catch (error) {
+      console.error('Error placing order:', error);
+      setIsProcessing(false);
+      // Ideally show error message to user here
+    }
   };
 
   if (showConfirmation) {
@@ -207,7 +229,7 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
+
       <main className="pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
@@ -234,38 +256,38 @@ const Checkout = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-6">
               {currentStep === 0 &&
-              <CustomerInfoForm
-                formData={formData}
-                errors={errors}
-                onChange={handleFieldChange} />
+                <CustomerInfoForm
+                  formData={formData}
+                  errors={errors}
+                  onChange={handleFieldChange} />
 
               }
 
               {currentStep === 1 &&
-              <>
+                <>
                   <DeliveryAddressForm
-                  formData={formData}
-                  errors={errors}
-                  onChange={handleFieldChange} />
+                    formData={formData}
+                    errors={errors}
+                    onChange={handleFieldChange} />
 
                   <DeliveryOptions
-                  formData={formData}
-                  errors={errors}
-                  onChange={handleFieldChange} />
+                    formData={formData}
+                    errors={errors}
+                    onChange={handleFieldChange} />
 
                 </>
               }
 
               {currentStep === 2 &&
-              <PaymentSelection
-                formData={formData}
-                errors={errors}
-                onChange={handleFieldChange} />
+                <PaymentSelection
+                  formData={formData}
+                  errors={errors}
+                  onChange={handleFieldChange} />
 
               }
 
               {currentStep === 3 &&
-              <div className="bg-card rounded-lg p-6 shadow-soft">
+                <div className="bg-card rounded-lg p-6 shadow-soft">
                   <h2 className="text-2xl font-headline font-semibold text-primary mb-6">
                     Review Your Order
                   </h2>
@@ -327,11 +349,11 @@ const Checkout = () => {
                         </div>
                       </div>
                       {formData.specialInstructions &&
-                    <div className="mt-3">
+                        <div className="mt-3">
                           <p className="text-muted-foreground text-sm">Special Instructions</p>
                           <p className="text-foreground text-sm">{formData.specialInstructions}</p>
                         </div>
-                    }
+                      }
                     </div>
 
                     <div className="p-4 bg-surface rounded-lg">
@@ -346,12 +368,12 @@ const Checkout = () => {
 
                     <div className="space-y-3">
                       <Checkbox
-                      label="I accept the terms and conditions"
-                      description="By placing this order, you agree to our terms of service and privacy policy"
-                      checked={formData.termsAccepted}
-                      onChange={(e) => handleFieldChange('termsAccepted', e.target.checked)}
-                      error={errors.termsAccepted}
-                      required />
+                        label="I accept the terms and conditions"
+                        description="By placing this order, you agree to our terms of service and privacy policy"
+                        checked={formData.termsAccepted}
+                        onChange={(e) => handleFieldChange('termsAccepted', e.target.checked)}
+                        error={errors.termsAccepted}
+                        required />
 
                     </div>
                   </div>
@@ -360,37 +382,37 @@ const Checkout = () => {
 
               <div className="flex items-center justify-between pt-6">
                 {currentStep > 0 &&
-                <Button
-                  variant="outline"
-                  size="lg"
-                  iconName="ArrowLeft"
-                  iconPosition="left"
-                  onClick={handleBack}>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    iconName="ArrowLeft"
+                    iconPosition="left"
+                    onClick={handleBack}>
 
                     Back
                   </Button>
                 }
 
                 {currentStep < steps.length - 1 ?
-                <Button
-                  variant="default"
-                  size="lg"
-                  iconName="ArrowRight"
-                  iconPosition="right"
-                  onClick={handleNext}
-                  className={currentStep === 0 ? 'ml-auto' : ''}>
+                  <Button
+                    variant="default"
+                    size="lg"
+                    iconName="ArrowRight"
+                    iconPosition="right"
+                    onClick={handleNext}
+                    className={currentStep === 0 ? 'ml-auto' : ''}>
 
                     Continue
                   </Button> :
 
-                <Button
-                  variant="default"
-                  size="lg"
-                  iconName="CheckCircle2"
-                  iconPosition="left"
-                  onClick={handlePlaceOrder}
-                  loading={isProcessing}
-                  className="ml-auto">
+                  <Button
+                    variant="default"
+                    size="lg"
+                    iconName="CheckCircle2"
+                    iconPosition="left"
+                    onClick={handlePlaceOrder}
+                    loading={isProcessing}
+                    className="ml-auto">
 
                     {isProcessing ? 'Processing...' : 'Place Order'}
                   </Button>
