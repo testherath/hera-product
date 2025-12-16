@@ -1,5 +1,5 @@
-import { db } from '../src/db';
-import { users } from '../src/db/schema';
+import { db } from '../src/db/index.js';
+import { users } from '../src/db/schema.js';
 import { sql } from '@vercel/postgres';
 
 export const config = {

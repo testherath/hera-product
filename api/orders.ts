@@ -1,6 +1,6 @@
 
-import { db } from '../src/db';
-import { orders, orderItems } from '../src/db/schema';
+import { db } from '../src/db/index.js';
+import { orders, orderItems } from '../src/db/schema.js';
 import { sql } from 'drizzle-orm';
 
 export const config = {
