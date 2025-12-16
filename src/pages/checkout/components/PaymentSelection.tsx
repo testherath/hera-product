@@ -9,7 +9,7 @@ interface PaymentSelectionProps {
   onChange: (field: keyof CheckoutFormData, value: string) => void;
 }
 
-const PaymentSelection = ({ formData, errors, onChange }: PaymentSelectionProps) => {
+const PaymentSelection = ({ formData: _formData, errors, onChange }: PaymentSelectionProps) => {
   const [selectedPayment, setSelectedPayment] = useState<string>('card');
 
   const paymentMethods: PaymentMethod[] = [
@@ -53,26 +53,23 @@ const PaymentSelection = ({ formData, errors, onChange }: PaymentSelectionProps)
       <h2 className="text-2xl font-headline font-semibold text-primary mb-6">
         Payment Method
       </h2>
-      
+
       <div className="space-y-3 mb-6">
         {paymentMethods.map((method) => (
           <div
             key={method.id}
             onClick={() => method.enabled && handlePaymentSelect(method.id)}
-            className={`border-2 rounded-lg p-4 transition-all duration-300 ${
-              method.enabled ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'
-            } ${
-              selectedPayment === method.id
-                ? 'border-primary bg-surface' :'border-border hover:border-muted'
-            }`}
+            className={`border-2 rounded-lg p-4 transition-all duration-300 ${method.enabled ? 'cursor-pointer' : 'opacity-50 cursor-not-allowed'
+              } ${selectedPayment === method.id
+                ? 'border-primary bg-surface' : 'border-border hover:border-muted'
+              }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div
-                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    selectedPayment === method.id
-                      ? 'border-primary bg-primary' :'border-border'
-                  }`}
+                  className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedPayment === method.id
+                      ? 'border-primary bg-primary' : 'border-border'
+                    }`}
                 >
                   {selectedPayment === method.id && (
                     <div className="w-2 h-2 rounded-full bg-primary-foreground" />
@@ -95,7 +92,7 @@ const PaymentSelection = ({ formData, errors, onChange }: PaymentSelectionProps)
           </div>
         ))}
       </div>
-      
+
       {selectedPayment === 'card' && (
         <div className="space-y-4 p-4 bg-surface rounded-lg">
           <Input
@@ -130,7 +127,7 @@ const PaymentSelection = ({ formData, errors, onChange }: PaymentSelectionProps)
           />
         </div>
       )}
-      
+
       {selectedPayment === 'bank' && (
         <div className="p-4 bg-surface rounded-lg">
           <div className="flex items-start space-x-3">
@@ -146,7 +143,7 @@ const PaymentSelection = ({ formData, errors, onChange }: PaymentSelectionProps)
           </div>
         </div>
       )}
-      
+
       <div className="mt-6 p-4 bg-success/10 rounded-lg border border-success/20">
         <div className="flex items-start space-x-3">
           <Icon name="Shield" size={20} className="text-success mt-1" />

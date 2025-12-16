@@ -16,7 +16,7 @@ interface CustomizationPanelProps {
 const CustomizationPanel = ({
   woodTypes,
   sizes,
-  engravingOptions,
+  engravingOptions: _engravingOptions,
   customization,
   onCustomizationChange,
 }: CustomizationPanelProps) => {
@@ -79,10 +79,9 @@ const CustomizationPanel = ({
               <button
                 key={wood.id}
                 onClick={() => handleWoodTypeChange(wood.id)}
-                className={`p-4 rounded-lg border-2 transition-all duration-300 text-left ${
-                  customization.woodType === wood.id
-                    ? 'border-primary bg-primary/5' :'border-border hover:border-muted'
-                }`}
+                className={`p-4 rounded-lg border-2 transition-all duration-300 text-left ${customization.woodType === wood.id
+                    ? 'border-primary bg-primary/5' : 'border-border hover:border-muted'
+                  }`}
               >
                 <div className="aspect-video rounded-lg overflow-hidden mb-2">
                   <img
@@ -120,9 +119,8 @@ const CustomizationPanel = ({
           options={sizes.map((size) => ({
             value: size.id,
             label: size.name,
-            description: `${size.dimensions} - ${
-              size.priceAdjustment > 0 ? '+' : ''
-            }LKR ${size.priceAdjustment}`,
+            description: `${size.dimensions} - ${size.priceAdjustment > 0 ? '+' : ''
+              }LKR ${size.priceAdjustment}`,
           }))}
           value={customization.size}
           onChange={handleSizeChange}
@@ -133,14 +131,12 @@ const CustomizationPanel = ({
             <label className="text-sm font-medium text-primary">Add Engraving</label>
             <button
               onClick={handleEngravingToggle}
-              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${
-                customization.engraving.enabled ? 'bg-primary' : 'bg-muted'
-              }`}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${customization.engraving.enabled ? 'bg-primary' : 'bg-muted'
+                }`}
             >
               <span
-                className={`absolute top-1 left-1 w-4 h-4 bg-card rounded-full transition-transform duration-300 ${
-                  customization.engraving.enabled ? 'translate-x-6' : 'translate-x-0'
-                }`}
+                className={`absolute top-1 left-1 w-4 h-4 bg-card rounded-full transition-transform duration-300 ${customization.engraving.enabled ? 'translate-x-6' : 'translate-x-0'
+                  }`}
               />
             </button>
           </div>
