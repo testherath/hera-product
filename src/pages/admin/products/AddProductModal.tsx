@@ -32,24 +32,6 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onPr
         setLoading(true);
 
         try {
-            // Prepare data for API
-            // Note: images and tags are hardcoded for now as simple arrays/JSON since we don't have full UI for them yet
-            const productData = {
-                ...formData,
-                price: parseInt(formData.price),
-                rating: 5.0, // Default for new product
-                reviews: 0,
-                // Default structure matching schema requirements
-                images: JSON.stringify([{ url: formData.image, alt: formData.alt, type: 'main' }]),
-                tags: JSON.stringify(['handcrafted', 'wooden', formData.category]),
-                // Other defaults
-                originalPrice: null,
-                discount: null,
-                woodType: formData.woodType,
-                customizable: false,
-                dimensions: 'Standard',
-            };
-
             // Fix conflict: API expects objects for images/tags because it runs JSON.stringify, 
             // BUT schema says these cols are text. 
             // Correct approach: Client sends JSON object usually, API handles it.
