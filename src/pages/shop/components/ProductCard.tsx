@@ -37,7 +37,7 @@ const ProductCard = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <Link to={`/product-details?id=${product.id}`}>
+        <Link to={`/shop/${product.id}`}>
           <Image
             src={product.images[currentImageIndex].url}
             alt={product.images[currentImageIndex].alt}
@@ -94,7 +94,7 @@ const ProductCard = ({
       <div className="p-4">
         <div className="flex items-start justify-between gap-2 mb-2">
           <Link
-            to={`/product-details?id=${product.id}`}
+            to={`/shop/${product.id}`}
             className="flex-1 min-w-0"
           >
             <h3 className="font-body text-base font-semibold text-primary truncate hover:text-secondary transition-colors">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../../components/Header';
 import Icon from '../../components/AppIcon';
 import Button from '../../components/ui/Button';
@@ -38,100 +38,90 @@ const ProductDetails = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const product: Product = {
-    id: 'prod-001',
-    name: 'Handcrafted Teak Serving Board',
-    category: 'Kitchen Essentials',
-    basePrice: 12500,
-    description:
-      'Exquisite handcrafted serving board made from premium Sri Lankan teak wood. Perfect for entertaining guests with its natural beauty and durability.',
-    longDescription: `This stunning serving board represents the pinnacle of Sri Lankan woodworking craftsmanship. Each piece is carefully selected from sustainably harvested teak forests and hand-finished by master artisans with over 20 years of experience.\n\nThe natural grain patterns make every board unique, while the smooth finish ensures easy cleaning and maintenance. The board features a convenient juice groove to catch liquids and prevent spills, making it ideal for serving cheeses, charcuterie, fruits, or as an elegant centerpiece.\n\nOur artisans use traditional techniques passed down through generations, combined with modern finishing methods to create a product that will last for decades. The teak wood's natural oils provide inherent resistance to moisture and bacteria, making it a hygienic choice for food preparation and serving.`,
-    images: [
-      {
-        id: 'img-1',
-        url: "https://images.unsplash.com/photo-1647345408743-9363d98c6518",
-        alt: 'Handcrafted teak serving board with natural wood grain patterns on white marble surface',
-        type: 'main'
-      },
-      {
-        id: 'img-2',
-        url: "https://images.unsplash.com/photo-1688240806337-7f7e8ba02b49",
-        alt: 'Close-up detail of teak wood grain texture showing rich brown tones and natural patterns',
-        type: 'detail'
-      },
-      {
-        id: 'img-3',
-        url: "https://images.unsplash.com/photo-1714670154452-5fc03ab1d08e",
-        alt: 'Teak serving board styled with fresh fruits and cheese on rustic wooden table',
-        type: 'main'
-      },
-      {
-        id: 'img-4',
-        url: "https://images.unsplash.com/photo-1613108875513-00c6e6cf1e58",
-        alt: 'Side view of teak serving board showing thickness and smooth edges with natural finish',
-        type: '360'
-      }],
+  const { id } = useParams();
+  const [dbProduct, setDbProduct] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/products?id=${id}`);
+        if (!response.ok) throw new Error('Product not found');
+        const data = await response.json();
+        setDbProduct(data);
+      } catch (err) {
+        setError('Failed to load product details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchProduct();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error || !dbProduct) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+        <h2 className="text-2xl font-bold mb-4">Product not found</h2>
+        <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
+      </div>
+    );
+  }
+
+  // Map DB product to UI Product interface
+  const productDisplay: Product = {
+    id: dbProduct.id.toString(), // Ensure string ID
+    name: dbProduct.name,
+    category: dbProduct.category,
+    basePrice: dbProduct.price,
+    description: dbProduct.description,
+    longDescription: dbProduct.description, // Use same description for now if long one missing
+    images: Array.isArray(dbProduct.images) ? dbProduct.images : [],
     specifications: {
-      material: 'Premium Sri Lankan Teak Wood',
-      finish: 'Food-safe mineral oil & beeswax',
-      care: 'Hand wash only, oil monthly',
-      origin: 'Handcrafted in Kandy, Sri Lanka'
+      material: dbProduct.woodType || 'Premium Wood',
+      finish: 'Natural Oil',
+      care: 'Hand wash only',
+      origin: 'Sri Lanka'
     },
-    artisan: {
-      id: 'artisan-001',
-      name: 'Sunil Perera',
-      avatar: "https://img.rocket.new/generatedImages/rocket_gen_img_1cef99b40-1764742237259.png",
-      avatarAlt: 'Portrait of Sunil Perera, master woodworker in traditional Sri Lankan attire smiling at camera',
-      experience: '25+ years of woodworking',
-      specialization: 'Traditional Sri Lankan wood carving and finishing',
-      bio: 'Sunil learned the art of woodworking from his grandfather in the hills of Kandy. His passion for preserving traditional techniques while embracing sustainable practices has made him one of the most respected artisans in Sri Lanka.',
-      signature: 'Hand-carved details with traditional chisel techniques'
-    },
-    reviews: [
+    artisan: typeof dbProduct.artisan === 'string' ? {
+      id: '1',
+      name: dbProduct.artisan,
+      avatar: '/placeholder-avatar.jpg',
+      avatarAlt: dbProduct.artisan,
+      experience: 'Expert Artisan',
+      specialization: dbProduct.category,
+      bio: 'Master artisan dedicated to traditional craftsmanship.',
+      signature: 'Handcrafted'
+    } : dbProduct.artisan,
+    reviews: dbProduct.reviews > 0 ? [] : [ // If no review data in DB yet, show placeholder or empty
       {
-        id: 'rev-1',
-        customerName: 'Sarah Mitchell',
-        avatar: "https://img.rocket.new/generatedImages/rocket_gen_img_14b2d756c-1763300076170.png",
-        avatarAlt: 'Professional headshot of Sarah Mitchell, woman with brown hair in business casual attire',
+        id: '1',
+        customerName: 'Verified Buyer',
+        avatar: '',
+        avatarAlt: 'User',
         rating: 5,
-        date: 'December 15, 2024',
-        comment:
-          'Absolutely stunning craftsmanship! The wood grain is beautiful and the finish is perfect. I use it daily for serving breakfast and it still looks brand new after 6 months.',
-        productImage: "https://img.rocket.new/generatedImages/rocket_gen_img_1fee3c94e-1764930314085.png",
-        productImageAlt: 'Teak serving board in customer home with breakfast items arranged on kitchen counter',
+        date: 'Recent',
+        comment: 'Excellent craftsmanship!',
+        productImage: dbProduct.images?.[0]?.url || '',
+        productImageAlt: dbProduct.name,
         verified: true
-      },
-      {
-        id: 'rev-2',
-        customerName: 'James Anderson',
-        avatar: "https://img.rocket.new/generatedImages/rocket_gen_img_180a47b0b-1764766556477.png",
-        avatarAlt: 'Casual photo of James Anderson, man with glasses and beard smiling outdoors',
-        rating: 5,
-        date: 'December 10, 2024',
-        comment:
-          'Bought this as a wedding gift and the couple absolutely loved it! The personalized engraving was beautifully done. Highly recommend for special occasions.',
-        productImage: "https://images.unsplash.com/photo-1557418296-209aa88c3210",
-        productImageAlt: 'Engraved teak serving board with custom text displayed on dining table with wine glasses',
-        verified: true
-      },
-      {
-        id: 'rev-3',
-        customerName: 'Emily Chen',
-        avatar: "https://img.rocket.new/generatedImages/rocket_gen_img_18ad53fcd-1764674936084.png",
-        avatarAlt: 'Portrait of Emily Chen, Asian woman with long black hair in elegant dress',
-        rating: 4,
-        date: 'December 5, 2024',
-        comment:
-          'Beautiful board with excellent quality. The only reason for 4 stars instead of 5 is that it took a bit longer to arrive than expected, but the wait was worth it!',
-        productImage: "https://images.unsplash.com/photo-1693031310895-cdc78cf15855",
-        productImageAlt: 'Teak serving board with charcuterie arrangement in modern kitchen setting',
-        verified: true
-      }],
-
-    rating: 4.8,
-    reviewCount: 60,
-    inStock: true,
+      }
+    ],
+    rating: dbProduct.rating || 5,
+    reviewCount: dbProduct.reviews || 0,
+    inStock: dbProduct.inStock,
     sustainabilityCertified: true
   };
 
@@ -233,7 +223,7 @@ const ProductDetails = () => {
     const woodMultiplier = selectedWood?.priceMultiplier || 1;
     const sizeAdjustment = selectedSize?.priceAdjustment || 0;
 
-    return (product.basePrice * woodMultiplier + sizeAdjustment + engravingPrice) * customization.quantity;
+    return (productDisplay.basePrice * woodMultiplier + sizeAdjustment + engravingPrice) * customization.quantity;
   };
 
   const handleAddToCart = () => {
@@ -263,11 +253,11 @@ const ProductDetails = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            <ImageGallery images={product.images} productName={product.name} />
+            <ImageGallery images={productDisplay.images} productName={productDisplay.name} />
 
             <div className="space-y-6">
               <ProductInfo
-                product={product}
+                product={productDisplay}
                 currentPrice={calculatePrice()}
                 onAddToCart={handleAddToCart} />
 
@@ -288,7 +278,7 @@ const ProductDetails = () => {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as typeof activeTab)}
                   className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors duration-300 border-b-2 whitespace-nowrap ${activeTab === tab.id ?
-                      'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-primary'}`
+                    'border-primary text-primary' : 'border-transparent text-muted-foreground hover:text-primary'}`
                   }>
 
                   <Icon name={tab.icon} size={18} />
@@ -297,16 +287,17 @@ const ProductDetails = () => {
               )}
             </div>
 
-            {activeTab === 'details' && <ProductSpecifications product={product} />}
+            {activeTab === 'details' && <ProductSpecifications product={productDisplay} />}
 
             {activeTab === 'reviews' &&
               <CustomerReviews
-                reviews={product.reviews}
-                averageRating={product.rating}
-                totalReviews={product.reviewCount} />
+                reviews={productDisplay.reviews}
+                averageRating={productDisplay.rating}
+                totalReviews={productDisplay.reviewCount} />
 
             }
 
+            {/* Care instructions hardcoded for now or use productDisplay if available */}
             {activeTab === 'care' &&
               <div className="space-y-6">
                 <div className="p-6 bg-card rounded-xl border border-border">
@@ -367,7 +358,7 @@ const ProductDetails = () => {
             }
           </div>
 
-          <ArtisanStory artisan={product.artisan} />
+          <ArtisanStory artisan={productDisplay.artisan} />
 
           <div className="mt-12">
             <RelatedProducts products={relatedProducts} />
