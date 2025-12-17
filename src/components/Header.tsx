@@ -32,25 +32,12 @@ const Header = ({ className = '' }: HeaderProps) => {
             to="/homepage"
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-300"
           >
-            {/* <svg
-              width="40"
-              height="40"
-              viewBox="0 0 40 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8 lg:w-10 lg:h-10"
-            >
-              <rect width="40" height="40" rx="8" fill="var(--color-primary)" />
-              <path
-                d="M12 28V16L20 12L28 16V28H23V21H17V28H12Z"
-                fill="var(--color-primary-foreground)"
-                stroke="var(--color-primary-foreground)"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-              <circle cx="20" cy="18" r="2" fill="var(--color-accent)" />
-            </svg> */}
-            <img src="" alt="" />
+            {/* Logo Image */}
+            <img
+              src="/assets/images/hera-products.jpg"
+              alt="Hérā Products"
+              className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg object-cover"
+            />
             <span className="font-headline text-xl lg:text-2xl font-semibold text-primary">
               Hérā Products
             </span>
