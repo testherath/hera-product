@@ -38,24 +38,24 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
           <div className="lg:col-span-2">
             <Link to="/homepage" className="flex items-center space-x-2 mb-4">
-              <svg 
-                width="40" 
-                height="40" 
-                viewBox="0 0 40 40" 
-                fill="none" 
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <rect width="40" height="40" rx="8" fill="var(--color-accent)" />
-                <path 
-                  d="M12 28V16L20 12L28 16V28H23V21H17V28H12Z" 
-                  fill="var(--color-accent-foreground)" 
-                  stroke="var(--color-accent-foreground)" 
-                  strokeWidth="1.5" 
+                <path
+                  d="M12 28V16L20 12L28 16V28H23V21H17V28H12Z"
+                  fill="var(--color-accent-foreground)"
+                  stroke="var(--color-accent-foreground)"
+                  strokeWidth="1.5"
                   strokeLinejoin="round"
                 />
                 <circle cx="20" cy="18" r="2" fill="var(--color-primary)" />
               </svg>
-              <span className="font-headline text-xl font-semibold">Hera Handcrafted</span>
+              <span className="font-headline text-xl font-semibold">Hérā Products</span>
             </Link>
             <p className="text-primary-foreground/80 mb-6 leading-relaxed">
               Preserving Sri Lankan woodworking heritage through handcrafted excellence. Each piece tells a story of tradition, sustainability, and artistry.
@@ -126,7 +126,7 @@ const Footer = () => {
         <div className="border-t border-primary-foreground/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-primary-foreground/60">
-              © {currentYear} Hera Handcrafted. All rights reserved.
+              © {currentYear} Hérā Products. All rights reserved.
             </p>
             <div className="flex gap-6 text-sm">
               <Link to="/privacy" className="text-primary-foreground/60 hover:text-accent transition-colors">

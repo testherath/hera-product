@@ -441,7 +441,7 @@ const Checkout = () => {
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Hera Handcrafted. All rights reserved.
+              © {new Date().getFullYear()} Hérā Products. All rights reserved.
             </p>
           </div>
         </div>

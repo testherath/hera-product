@@ -32,7 +32,7 @@ const Header = ({ className = '' }: HeaderProps) => {
             to="/homepage"
             className="flex items-center space-x-2 hover:opacity-80 transition-opacity duration-300"
           >
-            <svg
+            {/* <svg
               width="40"
               height="40"
               viewBox="0 0 40 40"
@@ -49,9 +49,10 @@ const Header = ({ className = '' }: HeaderProps) => {
                 strokeLinejoin="round"
               />
               <circle cx="20" cy="18" r="2" fill="var(--color-accent)" />
-            </svg>
+            </svg> */}
+            <img src="" alt="" />
             <span className="font-headline text-xl lg:text-2xl font-semibold text-primary">
-              Hera Handcrafted
+              Hérā Products
             </span>
           </Link>
 
@@ -61,7 +62,7 @@ const Header = ({ className = '' }: HeaderProps) => {
                 key={item.path}
                 to={item.path}
                 className={`font-body text-body-md transition-colors duration-300 hover:text-primary ${isActivePath(item.path)
-                    ? 'text-primary font-medium' : 'text-muted-foreground'
+                  ? 'text-primary font-medium' : 'text-muted-foreground'
                   }`}
               >
                 {item.label}
@@ -129,7 +130,7 @@ const Header = ({ className = '' }: HeaderProps) => {
                 to={item.path}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`block py-2 px-3 rounded-lg font-body text-body-md transition-colors duration-300 ${isActivePath(item.path)
-                    ? 'bg-surface text-primary font-medium' : 'text-muted-foreground hover:bg-surface hover:text-primary'
+                  ? 'bg-surface text-primary font-medium' : 'text-muted-foreground hover:bg-surface hover:text-primary'
                   }`}
               >
                 {item.label}

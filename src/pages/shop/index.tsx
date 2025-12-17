@@ -189,7 +189,7 @@ const Shop = () => {
   return (
     <>
       <Helmet>
-        <title>Shop - Hera Handcrafted | Premium Sri Lankan Wooden Products</title>
+        <title>Shop - Hérā Products | Premium Sri Lankan Wooden Products</title>
         <meta
           name="description"
           content="Discover our collection of handcrafted wooden products. Kitchen essentials, home décor, and custom creations made by skilled Sri Lankan artisans." />
