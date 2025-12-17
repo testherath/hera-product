@@ -334,7 +334,7 @@ const Checkout = () => {
                     <div className="p-4 bg-surface rounded-lg">
                       <h3 className="font-semibold text-foreground mb-3 flex items-center">
                         <Icon name="Truck" size={20} className="mr-2 text-primary" />
-                        Delivery Details
+                        Delivery Detail
                       </h3>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
