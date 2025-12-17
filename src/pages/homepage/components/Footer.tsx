@@ -26,7 +26,7 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: 'Facebook', url: '#', label: 'Facebook' },
+    { icon: 'Facebook', url: 'https://www.facebook.com/share/1BYcLLJoFN/', label: 'Facebook' },
     { icon: 'Instagram', url: '#', label: 'Instagram' },
     { icon: 'Twitter', url: '#', label: 'Twitter' },
     { icon: 'Youtube', url: '#', label: 'YouTube' },
